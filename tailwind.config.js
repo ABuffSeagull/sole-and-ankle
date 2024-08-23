@@ -18,6 +18,11 @@ export default {
       primary: "#C5295D",
       secondary: "#6868D9",
     },
+    fontWeight: {
+      normal: 500,
+      medium: 600,
+      bold: 800,
+    },
     extend: {
       fontFamily: {
         sans: ["Raleway Variable", ...theme.fontFamily.sans],
