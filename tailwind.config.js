@@ -18,7 +18,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["Raleway", ...theme.fontFamily.sans],
+        sans: ["Raleway Variable", ...theme.fontFamily.sans],
       },
     },
   },
