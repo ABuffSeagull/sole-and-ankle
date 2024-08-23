@@ -5,6 +5,8 @@ export default {
   content: ["./index.html", "src/**/*.elm"],
   theme: {
     colors: {
+      transparent: "transparent",
+      current: "currentColor",
       white: "#FFFFFF",
       gray: {
         100: "#C9CECF",
