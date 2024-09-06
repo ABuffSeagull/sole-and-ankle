@@ -9,7 +9,7 @@ export default {
       current: "currentColor",
       white: "#FFFFFF",
       gray: {
-        100: "#C9CECF",
+        100: "#F2F3F3",
         300: "#C9CECF",
         500: "#949A9C",
         700: "#60666C",
