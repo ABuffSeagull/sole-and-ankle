@@ -42,6 +42,8 @@ view model =
     , body =
         [ viewSuperHeader
         , viewHeader
+        , viewShell <|
+            div [] []
         ]
     }
 
@@ -67,6 +69,40 @@ viewHeader =
         , a [ Attr.href "#", class "uppercase" ] [ text "Women" ]
         , a [ Attr.href "#", class "uppercase" ] [ text "Kids" ]
         , a [ Attr.href "#", class "uppercase" ] [ text "Collections" ]
+        ]
+
+
+viewShell children =
+    main_ [ class "flex pt-16" ]
+        [ div [ class "flex flex-col gap-4 px-8 basis-80 flex-none" ]
+            [ div [ class "flex gap-2 mb-8" ] <|
+                List.map (List.singleton >> span [])
+                    [ text "Home", text "/", text "Sale", text "/", text "Shoes" ]
+            , a [ Attr.href "#", class "font-medium" ] [ text "Lifestyle" ]
+            , a [ Attr.href "#", class "font-medium" ] [ text "Jordan" ]
+            , a [ Attr.href "#", class "font-medium text-primary" ] [ text "Running" ]
+            , a [ Attr.href "#", class "font-medium" ] [ text "Basketball" ]
+            , a [ Attr.href "#", class "font-medium" ] [ text "Training & Gym" ]
+            , a [ Attr.href "#", class "font-medium" ] [ text "Football" ]
+            , a [ Attr.href "#", class "font-medium" ] [ text "Skateboarding" ]
+            , a [ Attr.href "#", class "font-medium" ] [ text "American Football" ]
+            , a [ Attr.href "#", class "font-medium" ] [ text "Baseball" ]
+            , a [ Attr.href "#", class "font-medium" ] [ text "Golf" ]
+            , a [ Attr.href "#", class "font-medium" ] [ text "Tennis" ]
+            , a [ Attr.href "#", class "font-medium" ] [ text "Athletics" ]
+            , a [ Attr.href "#", class "font-medium" ] [ text "Walking" ]
+            ]
+        , div [ class "grow pr-8" ]
+            [ div [ class "flex items-center gap-5" ]
+                [ h2 [ class "font-medium text-2xl mr-auto" ] [ text "Running" ]
+                , span [ class "text-gray-700" ] [ text "Sort" ]
+                , div [ class "bg-gray-100 rounded-lg px-4 py-3 font-medium" ]
+                    [ text "Newest Releases"
+                    , icon ChevronDown [ SAttr.class "inline-block ml-3 size-4" ]
+                    ]
+                ]
+            , children
+            ]
         ]
 
 
