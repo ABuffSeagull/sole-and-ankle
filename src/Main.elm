@@ -76,14 +76,15 @@ viewSuperHeader =
 
 
 viewHeader =
-    nav [ class "flex justify-center relative items-end gap-12 font-medium py-5 border-b border-gray-300 text-lg" ]
-        [ a [ Attr.href "/", class "font-bold text-2xl absolute left-8" ] [ text "Sole&Ankle" ]
+    nav [ class "pl-8 flex items-end gap-12 font-medium py-5 border-b border-gray-300 text-lg" ]
+        [ div [ class "flex-1" ] [ a [ Attr.href "/", class "font-bold text-2xl" ] [ text "Sole&Ankle" ] ]
         , a [ Attr.href "#", class "uppercase text-secondary" ] [ text "Sale" ]
         , a [ Attr.href "#", class "uppercase" ] [ text "New Releases" ]
         , a [ Attr.href "#", class "uppercase" ] [ text "Men" ]
         , a [ Attr.href "#", class "uppercase" ] [ text "Women" ]
         , a [ Attr.href "#", class "uppercase" ] [ text "Kids" ]
         , a [ Attr.href "#", class "uppercase" ] [ text "Collections" ]
+        , div [ class "flex-1" ] []
         ]
 
 
