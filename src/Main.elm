@@ -40,13 +40,13 @@ update msg model =
 view model =
     { title = "Sole and Ankle"
     , body =
-        [ superHeader
-        , header
+        [ viewSuperHeader
+        , viewHeader
         ]
     }
 
 
-superHeader =
+viewSuperHeader =
     div [ class "bg-gray-900 px-8 py-2 flex text-gray-300 gap-6" ]
         [ div [ class "mr-auto text-white" ] [ text "Free shipping on domestic orders over $75!" ]
         , label [ class "border-b border-gray-300 relative" ]
@@ -58,7 +58,7 @@ superHeader =
         ]
 
 
-header =
+viewHeader =
     nav [ class "flex justify-center relative items-end gap-12 font-medium py-5 border-b border-gray-300 text-lg" ]
         [ a [ Attr.href "/", class "font-bold text-2xl absolute left-8" ] [ text "Sole&Ankle" ]
         , a [ Attr.href "#", class "uppercase text-secondary" ] [ text "Sale" ]
