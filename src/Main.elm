@@ -1,6 +1,6 @@
 module Main exposing (main)
 
-import Browser
+import Browser exposing (Document)
 import Html exposing (..)
 import Html.Attributes as Attr exposing (class, classList)
 import Json.Decode as D
@@ -22,6 +22,7 @@ type alias Model =
     { shoes : List Shoe, now : Int }
 
 
+init : D.Value -> ( Model, Cmd Msg )
 init value =
     let
         decoder =
@@ -44,14 +45,17 @@ type Msg
     = Noop
 
 
+subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.none
 
 
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     ( model, Cmd.none )
 
 
+view : Model -> Document Msg
 view model =
     { title = "Sole and Ankle"
     , body =
@@ -63,6 +67,7 @@ view model =
     }
 
 
+viewSuperHeader : Html Msg
 viewSuperHeader =
     div [ class "bg-gray-900 px-8 py-2 flex text-gray-300 gap-6" ]
         [ div [ class "mr-auto text-white" ] [ text "Free shipping on domestic orders over $75!" ]
@@ -75,6 +80,7 @@ viewSuperHeader =
         ]
 
 
+viewHeader : Html Msg
 viewHeader =
     nav [ class "pl-8 flex items-end gap-12 font-medium py-5 border-b border-gray-300 text-lg" ]
         [ div [ class "flex-1" ] [ a [ Attr.href "/", class "font-bold text-2xl" ] [ text "Sole&Ankle" ] ]
@@ -88,6 +94,7 @@ viewHeader =
         ]
 
 
+viewShell : Html Msg -> Html Msg
 viewShell children =
     main_ [ class "flex pt-16" ]
         [ div [ class "flex flex-col gap-4 px-8 basis-80 flex-none" ]
