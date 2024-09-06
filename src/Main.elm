@@ -62,7 +62,7 @@ view model =
         [ viewSuperHeader
         , viewHeader
         , viewShell <|
-            div [] []
+            viewShoes model
         ]
     }
 
@@ -125,6 +125,48 @@ viewShell children =
                     ]
                 ]
             , children
+            ]
+        ]
+
+
+viewShoes : Model -> Html Msg
+viewShoes model =
+    div [ class "flex flex-wrap gap-8 mt-8" ] <|
+        List.map (viewShoe model.now) model.shoes
+
+
+viewShoe : Int -> Shoe -> Html Msg
+viewShoe now shoe =
+    div [ class "flex-auto basis-[300px] max-w-[600px]" ]
+        [ img [ class "w-full rounded-lg", Attr.src shoe.imageSrc, Attr.width 340, Attr.height 312 ] []
+        , div [ class "flex justify-between mt-3" ]
+            [ div []
+                [ div [ class "font-medium" ] [ text shoe.name ]
+                , div [ class "text-gray-700" ]
+                    [ text (String.fromInt shoe.numOfColors)
+                    , text <|
+                        if shoe.numOfColors == 1 then
+                            " Color"
+
+                        else
+                            " Colors"
+                    ]
+                ]
+            , div []
+                [ div [ classList [ ( "line-through text-gray-700", shoe.salePrice /= Nothing ) ] ] [ text ("$" ++ String.fromInt (shoe.price // 100)) ]
+                , div [ class "text-primary font-medium" ]
+                    [ let
+                        salePrice =
+                            case shoe.salePrice of
+                                Just price ->
+                                    "$" ++ String.fromInt (price // 100)
+
+                                Nothing ->
+                                    ""
+                      in
+                      text salePrice
+                    ]
+                ]
             ]
         ]
 
