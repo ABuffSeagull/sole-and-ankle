@@ -137,8 +137,18 @@ viewShoes model =
 
 viewShoe : Int -> Shoe -> Html Msg
 viewShoe now shoe =
-    div [ class "flex-auto basis-[300px] max-w-[600px]" ]
-        [ img [ class "w-full rounded-lg", Attr.src shoe.imageSrc, Attr.width 340, Attr.height 312 ] []
+    let
+        flag =
+            case shoe.salePrice of
+                Just _ ->
+                    div [ class "absolute bg-primary text-white text-sm p-2 rounded -right-1 top-4 font-medium" ] [ text "Sale" ]
+
+                Nothing ->
+                    div [] []
+    in
+    div [ class "flex-auto basis-[300px] max-w-[600px] relative" ]
+        [ flag
+        , img [ class "w-full rounded-lg", Attr.src shoe.imageSrc, Attr.width 340, Attr.height 312 ] []
         , div [ class "flex justify-between mt-3" ]
             [ div []
                 [ div [ class "font-medium" ] [ text shoe.name ]
