@@ -3,11 +3,12 @@ module Main exposing (main)
 import Browser
 import Html exposing (..)
 import Html.Attributes as Attr exposing (class, classList)
+import Json.Decode as D
 import Svg
 import Svg.Attributes as SAttr
 
 
-main : Program () Model Msg
+main : Program D.Value Model Msg
 main =
     Browser.document
         { init = init
@@ -18,11 +19,25 @@ main =
 
 
 type alias Model =
-    {}
+    { shoes : List Shoe, now : Int }
 
 
-init _ =
-    ( {}, Cmd.none )
+init value =
+    let
+        decoder =
+            D.map2 (\shoes now -> { shoes = shoes, now = now })
+                (D.field "shoes" (D.list shoeDecoder))
+                (D.field "now" D.int)
+
+        result =
+            D.decodeValue decoder value
+    in
+    case result of
+        Ok { shoes, now } ->
+            ( { shoes = shoes, now = now }, Cmd.none )
+
+        Err _ ->
+            ( { shoes = [], now = 0 }, Cmd.none )
 
 
 type Msg
@@ -134,3 +149,26 @@ icon id attr =
                     "x"
     in
     Svg.svg attr [ Svg.use [ SAttr.xlinkHref ("/icons.svg#" ++ strId) ] [] ]
+
+
+type alias Shoe =
+    { slug : String
+    , name : String
+    , imageSrc : String
+    , price : Int
+    , salePrice : Maybe Int
+    , releaseDate : Int
+    , numOfColors : Int
+    }
+
+
+shoeDecoder : D.Decoder Shoe
+shoeDecoder =
+    D.map7 Shoe
+        (D.field "slug" D.string)
+        (D.field "name" D.string)
+        (D.field "imageSrc" D.string)
+        (D.field "price" D.int)
+        (D.field "salePrice" (D.maybe D.int))
+        (D.field "releaseDate" D.int)
+        (D.field "numOfColors" D.int)

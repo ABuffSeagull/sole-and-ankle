@@ -3,5 +3,5 @@ import shoes from "./data.js";
 
 Main.init({
   node: document.body,
-  flags: shoes,
+  flags: { shoes, now: Date.now() },
 });
