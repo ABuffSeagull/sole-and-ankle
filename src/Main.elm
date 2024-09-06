@@ -6,6 +6,7 @@ import Html.Attributes as Attr exposing (class, classList)
 import Json.Decode as D
 import Svg
 import Svg.Attributes as SAttr
+import Time
 
 
 main : Program D.Value Model Msg
@@ -19,26 +20,30 @@ main =
 
 
 type alias Model =
-    { shoes : List Shoe, now : Int }
+    { shoes : List Shoe
+    , now : Time.Posix
+    , currentZone : Time.Zone
+    }
 
 
 init : D.Value -> ( Model, Cmd Msg )
 init value =
     let
         decoder =
-            D.map2 (\shoes now -> { shoes = shoes, now = now })
+            D.map3 (\shoes now currentZone -> { shoes = shoes, now = now, currentZone = currentZone })
                 (D.field "shoes" (D.list shoeDecoder))
-                (D.field "now" D.int)
+                (D.map Time.millisToPosix (D.at [ "now", "epochMilliseconds" ] D.int))
+                (D.map (\offset -> Time.customZone offset []) (D.field "currentOffset" D.int))
 
         result =
             D.decodeValue decoder value
     in
     case result of
-        Ok { shoes, now } ->
-            ( { shoes = shoes, now = now }, Cmd.none )
+        Ok model ->
+            ( model, Cmd.none )
 
         Err _ ->
-            ( { shoes = [], now = 0 }, Cmd.none )
+            ( { shoes = [], now = Time.millisToPosix 0, currentZone = Time.utc }, Cmd.none )
 
 
 type Msg
@@ -132,18 +137,25 @@ viewShell children =
 viewShoes : Model -> Html Msg
 viewShoes model =
     div [ class "flex flex-wrap gap-8 mt-8" ] <|
-        List.map (viewShoe model.now) model.shoes
+        List.map (viewShoe model.currentZone model.now) model.shoes
 
 
-viewShoe : Int -> Shoe -> Html Msg
-viewShoe now shoe =
+viewShoe : Time.Zone -> Time.Posix -> Shoe -> Html Msg
+viewShoe zone now shoe =
     let
         flag =
-            case shoe.salePrice of
-                Just _ ->
+            let
+                isNew =
+                    Time.toMonth zone shoe.releaseDate == Time.toMonth zone now
+            in
+            case ( shoe.salePrice, isNew ) of
+                ( Just _, _ ) ->
                     div [ class "absolute bg-primary text-white text-sm p-2 rounded -right-1 top-4 font-medium" ] [ text "Sale" ]
 
-                Nothing ->
+                ( Nothing, True ) ->
+                    div [ class "absolute bg-secondary text-white text-sm p-2 rounded -right-1 top-4 font-medium" ] [ text "Just Released!" ]
+
+                ( Nothing, False ) ->
                     div [] []
     in
     div [ class "flex-auto basis-[300px] max-w-[600px] relative" ]
@@ -217,7 +229,7 @@ type alias Shoe =
     , imageSrc : String
     , price : Int
     , salePrice : Maybe Int
-    , releaseDate : Int
+    , releaseDate : Time.Posix
     , numOfColors : Int
     }
 
@@ -230,5 +242,5 @@ shoeDecoder =
         (D.field "imageSrc" D.string)
         (D.field "price" D.int)
         (D.field "salePrice" (D.maybe D.int))
-        (D.field "releaseDate" D.int)
+        (D.map Time.millisToPosix (D.field "releaseDate" D.int))
         (D.field "numOfColors" D.int)
